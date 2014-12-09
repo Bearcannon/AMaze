@@ -1,0 +1,118 @@
+package falstad;
+
+import java.awt.*;
+import java.awt.color.*;
+
+
+public class MazePanel extends Panel  {
+	/* Panel operates a double buffer see
+	 * http://www.codeproject.com/Articles/2136/Double-buffer-in-standard-Java-AWT
+	 * for details
+	 */
+	Font f;
+	public Graphics gc;
+	Image bufferImage ;
+	public FontMetrics fm;
+	
+	public MazePanel() {
+		super() ;
+		this.setFocusable(false) ;
+		
+	}
+	@Override
+	public void update(Graphics g) {
+		paint(g) ;
+	}
+	@Override
+	public void paint(Graphics g) {
+		g.drawImage(bufferImage,0,0,null) ;
+	}
+	/*
+	public void setBufferImage(Image buffer) {
+		bufferImage = buffer ;
+	}
+	*/
+	public void initBufferImage() {
+		bufferImage = createImage(Constants.VIEW_WIDTH, Constants.VIEW_HEIGHT);
+		if (null == bufferImage)
+		{
+			System.out.println("Error: creation of buffered image failed, presumedly container not displayable");
+		}
+	}
+	public Graphics getBufferGraphics() {
+		if (null == bufferImage)
+			initBufferImage() ;
+		return bufferImage.getGraphics() ;
+	}
+	public void update() {
+		paint(getGraphics()) ;
+	}
+	public void fillRect(int i, int j, int view_width, int k) {
+		// TODO Auto-generated method stub
+		gc.fillRect(i, j, view_width, k);
+	}
+	
+	public void setColor(int k){
+		if (k == 0){
+			gc.setColor(Color.BLACK);
+		}
+		else if (k == 1){
+			gc.setColor(Color.DARK_GRAY);
+		}
+		else if (k == 2){
+			gc.setColor(Color.WHITE);
+		}
+		else if (k == 3){
+			gc.setColor(Color.GRAY);
+		}
+		else if (k == 4){
+			gc.setColor(Color.RED);
+		}
+		else if (k == 5){
+			gc.setColor(Color.YELLOW);
+		}
+		else if (k == 6){
+			gc.setColor(Color.orange);
+		}
+		else if (k == 7){
+			gc.setColor(Color.BLUE);
+		}
+		
+		
+		
+	}
+	public void setFont(int k){
+		if (k == 0){
+			Font f = new Font("TimesRoman", Font.BOLD, 48);	}
+		else if (k == 1){
+			Font f = new Font("TimesRoman", Font.BOLD, 16);
+		}
+		
+		gc.setFont(f);
+	}
+	public FontMetrics getFontMetrics(){
+		fm = gc.getFontMetrics();
+		return fm;
+	}
+	public void drawLine(int nx1, int ny1, int nx2, int ny12) {
+		// TODO Auto-generated method stub
+		gc.drawLine(nx1, ny1, nx2, ny12);
+	}
+	public void setColor(int[] vals) {
+		// TODO Auto-generated method stub
+		Color col = new Color(vals[0], vals[1], vals[2]);
+		gc.setColor(col);
+	}
+	public void fillOval(int i, int j, int cirsiz, int cirsiz2) {
+		// TODO Auto-generated method stub
+		gc.fillOval(i, j, cirsiz, cirsiz2);
+	}
+	public void drawString(String str, int i, int ypos) {
+		// TODO Auto-generated method stub
+		gc.drawString( str, i,  ypos);
+	}
+	public void fillPolygon(int[] xps, int[] yps, int i) {
+		// TODO Auto-generated method stub
+		gc.fillPolygon(xps, yps, i);
+	}
+}

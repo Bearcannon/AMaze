@@ -1,0 +1,70 @@
+package com.example.amazebyalexkrupski;
+
+import android.support.v7.app.ActionBarActivity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+
+/**
+ * Display for running maze. Allows user to go back to title, set view options, and takes user input.
+ * @author Maverick
+ *
+ */
+public class MazeRunning extends ActionBarActivity {
+
+	private Button Back_Button;
+	private Button Shortcut_Button;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_maze_running);
+		
+		Intent intent = getIntent();
+		
+		setBackButtonListener();
+		setShortcutButtonListener();
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.maze_running, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle action bar item clicks here. The action bar will
+		// automatically handle clicks on the Home/Up button, so long
+		// as you specify a parent activity in AndroidManifest.xml.
+		int id = item.getItemId();
+		if (id == R.id.action_settings) {
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+	
+	private void setBackButtonListener(){
+		 Back_Button = (Button)findViewById(R.id.button1);
+		 Back_Button.setOnClickListener(new View.OnClickListener() {
+          public void onClick(View v) {
+              Intent myIntent = new Intent(MazeRunning.this, MainActivity.class);
+              MazeRunning.this.startActivity(myIntent);
+          }
+      });
+	 }
+	
+	private void setShortcutButtonListener(){
+		 Shortcut_Button = (Button)findViewById(R.id.button2);
+		 Shortcut_Button.setOnClickListener(new View.OnClickListener() {
+           public void onClick(View v) {
+               Intent myIntent = new Intent(MazeRunning.this, Finish.class);
+               MazeRunning.this.startActivity(myIntent);
+           }
+       });
+	 }
+}

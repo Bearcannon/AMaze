@@ -1,0 +1,199 @@
+package com.example.amazebyalexkrupski;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
+
+
+/**
+ * Implements title screen. Allows user to select difficulty, random or from file, solver, and maze generation type.
+ * @author Maverick
+ *
+ */
+public class MainActivity extends Activity {
+
+	 private Spinner random_spinner;
+	 private Spinner file_spinner;
+	 private Spinner generation_spinner;
+	 private Spinner solve_spinner;
+	 private SeekBar DifficultySeekBar;
+	 private Button Begin_Maze;
+	 private TextView textView;
+	
+	 protected void onCreate(Bundle savedInstanceState) {
+		 
+	  super.onCreate(savedInstanceState);
+	  setContentView(R.layout.activity_main);
+	  initializeVariables();
+	  
+	  Intent intent = getIntent();
+	  
+	  textView.setText("Difficulty: " + DifficultySeekBar.getProgress() + "/" + DifficultySeekBar.getMax());
+	  
+	  
+	  DifficultySeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+		  int progress = 0;
+		  
+		  public void onProgressChanged(SeekBar seekBar, int progressValue, boolean fromUser) {
+			  progress = progressValue;
+			  
+		  }
+		
+		  public void onStartTrackingTouch(SeekBar seekBar) {
+			  
+		  }
+		
+		  public void onStopTrackingTouch(SeekBar seekBar) {
+			  textView.setText("Difficulty: " + progress + "/" + seekBar.getMax());
+		  }
+	   });
+	  
+	  setSolveSpinner();
+	  
+	  setGenerationSpinner();
+	  
+	  setGenerationListener();
+	  
+	  setRandomSpinner();
+	  
+	  setFileSpinner();
+	  
+	  setStartButtonListener();
+	 }
+	 
+	 /**
+	  * Takes solver type
+	  */
+	 private void setSolveSpinner(){
+		 solve_spinner = (Spinner) findViewById(R.id.solve_spinner);
+	        List<String> list = new ArrayList<String>();
+	        list.add("Manual");
+	        list.add("Random");
+	        list.add("Wall Follower");
+	        list.add("Wizard");
+	        list.add("Tremaux");
+	         
+	        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>
+	                     (this, android.R.layout.simple_spinner_item,list);
+	                      
+	        dataAdapter.setDropDownViewResource
+	                     (android.R.layout.simple_spinner_dropdown_item);
+	                      
+	        solve_spinner.setAdapter(dataAdapter);
+	            
+	 }
+	 /**
+	  * Takes generator type
+	  */
+	 private void setGenerationSpinner(){
+		 generation_spinner = (Spinner) findViewById(R.id.generation_spinner);
+	        List<String> list = new ArrayList<String>();
+	        list.add("Random");
+	        list.add("Select From File");
+	
+
+	         
+	        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>
+	                     (this, android.R.layout.simple_spinner_item,list);
+	                      
+	        dataAdapter.setDropDownViewResource
+	                     (android.R.layout.simple_spinner_dropdown_item);
+	                      
+	        generation_spinner.setAdapter(dataAdapter);
+	 }
+	 
+	 /**
+	  * Generation type options
+	  */
+	 private void setRandomSpinner(){
+		 random_spinner = (Spinner) findViewById(R.id.random_spinner);
+		 	random_spinner.setVisibility(View.GONE);
+	        List<String> list = new ArrayList<String>();
+	        list.add("Backtracking");
+	        list.add("Prim's");
+	        list.add("AldousBroder");
+
+	         
+	        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>
+	                     (this, android.R.layout.simple_spinner_item,list);
+	                      
+	        dataAdapter.setDropDownViewResource
+	                     (android.R.layout.simple_spinner_dropdown_item);
+	                      
+	        random_spinner.setAdapter(dataAdapter);
+	 }
+	 /**
+	  * Get from file
+	  */
+	 private void setFileSpinner(){
+		 file_spinner = (Spinner) findViewById(R.id.file_spinner);
+		 	file_spinner.setVisibility(View.GONE);
+	        List<String> list = new ArrayList<String>();
+	        list.add("file1");
+	        list.add("file2");
+	        list.add("file3");
+	        list.add("file4");
+
+	        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>
+	                     (this, android.R.layout.simple_spinner_item,list);
+	                      
+	        dataAdapter.setDropDownViewResource
+	                     (android.R.layout.simple_spinner_dropdown_item);
+	                      
+	        file_spinner.setAdapter(dataAdapter);
+	 }
+	 
+	 private void setGenerationListener(){
+		 generation_spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+			
+			    public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+			        if (generation_spinner.getSelectedItemPosition() == 0){
+			        	random_spinner.setVisibility(View.VISIBLE);
+			        	file_spinner.setVisibility(View.GONE);
+			        }
+			        else if(generation_spinner.getSelectedItemPosition() == 1){
+			        	random_spinner.setVisibility(View.GONE);
+			        	file_spinner.setVisibility(View.VISIBLE);
+			        }
+			    }
+
+			   
+			    public void onNothingSelected(AdapterView<?> parentView) {
+			    	random_spinner.setVisibility(View.GONE);
+			    	file_spinner.setVisibility(View.GONE);
+			    }
+
+			});
+	 }
+	 
+	 private void setStartButtonListener(){
+		 Begin_Maze = (Button)findViewById(R.id.button1);
+		 Begin_Maze.setOnClickListener(new View.OnClickListener() {
+             public void onClick(View v) {
+                 Intent myIntent = new Intent(MainActivity.this, Generating.class);
+                 MainActivity.this.startActivity(myIntent);
+             }
+         });
+	 }
+	 private void initializeVariables() {
+		 DifficultySeekBar = (SeekBar) findViewById(R.id.seekBar1);
+		 textView = (TextView) findViewById(R.id.textView1);
+	 }
+	 
+     
+	 
+}
